@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tech Saathi - Your Digital Companion</title>
+    
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --primary: #e67e22; 
+            --secondary: #2980b9; 
+            --bg: #fdfaf6; 
+            --text: #2c3e50; 
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg); 
+            margin: 0; padding: 10px; 
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 900px; margin: auto; padding-bottom: 100px; }
+        
+        /* Logo Header Section */
+        header { text-align: center; padding: 30px 0 10px; }
+        .logo-img { 
+            width: 100%; 
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .tagline { color: #7f8c8d; font-size: 1.1rem; font-weight: 500; margin-top: 0; }
+
+        #searchBar { 
+            width: 90%; max-width: 550px; padding: 20px 30px; 
+            border-radius: 100px; border: 1.5px solid #eee; 
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem; outline: none; display: block; 
+            margin: 20px auto 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            transition: all 0.3s ease;
+        }
+        #searchBar:focus { border-color: var(--primary); box-shadow: 0 10px 30px rgba(230, 126, 34, 0.1); }
+
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
+        .video-card { 
+            background: white; padding: 18px; border-radius: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
+            transition: transform 0.2s;
+        }
+        .video-card:hover { transform: translateY(-5px); }
+        iframe { width: 100%; aspect-ratio: 16/9; border-radius: 20px; border: none; background: #f1f2f6; }
+        
+        .video-card h3 { 
+            font-family: 'Outfit', sans-serif; 
+            margin: 20px 10px 10px; 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+        }
+
+        .nav-bar { 
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
+            padding: 12px 20px; border-radius: 100px; display: flex; gap: 12px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15); z-index: 1000; border: 1px solid rgba(255,255,255,0.4);
+        }
+        
+        .btn { 
+            padding: 14px 30px; border-radius: 100px; border: none; 
+            font-weight: 700; cursor: pointer; font-family: 'Outfit'; 
+            font-size: 1.05rem; transition: all 0.3s; 
+        }
+        .btn-mode { color: white; min-width: 170px; }
+        .btn-to-hindi { background: #27ae60; box-shadow: 0 8px 15px rgba(39, 174, 96, 0.2); }
+        .btn-to-english { background: var(--secondary); box-shadow: 0 8px 15px rgba(41, 128, 185, 0.2); }
+        .btn:active { transform: scale(0.95); }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <img src="IMG_1285.png" alt="Tech Saathi Logo" class="logo-img">
+        <p class="tagline">Your Digital Companion • आपका डिजिटल साथी</p>
+        <input type="text" id="searchBar" placeholder="Search for a lesson..." oninput="render()">
+    </header>
+
+    <div id="status" style="text-align:center; padding:60px; color:#bdc3c7; font-weight:600;">⌛ Loading library...</div>
+    <div id="videoList" class="video-grid"></div>
+</div>
+
+<div class="nav-bar">
+    <button class="btn btn-mode btn-to-hindi" id="langBtn" onclick="toggleLanguage()">हिंदी Mode</button>
+</div>
+
+<script>
+    const API = 'https://sheetdb.io/api/v1/2wpmdmnad79er';
+    let allVideos = [];
+    let currentLang = 'English'; 
+
+    async function fetchData() {
+        try {
+            const response = await fetch(API);
+            allVideos = await response.json();
+            document.getElementById('status').style.display = 'none';
+            render();
+        } catch (e) { 
+            document.getElementById('status').innerText = "❌ Database Connection Failed."; 
+        }
+    }
+
+    function getYouTubeID(url) {
+        const standardMatch = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
+        if (standardMatch && standardMatch[2].length === 11) return standardMatch[2];
+        const shortsMatch = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
+        if (shortsMatch) return shortsMatch[1];
+        return null;
+    }
+
+    function render() {
+        const searchQuery = document.getElementById('searchBar').value.toLowerCase();
+        const container = document.getElementById('videoList');
+        
+        const filtered = allVideos.filter(v => {
+            return v.language === currentLang && (v.title || "").toLowerCase().includes(searchQuery);
+        });
+
+        container.innerHTML = filtered.map(v => {
+            const id = getYouTubeID(v.url);
+            return id ? `
+                <div class="video-card">
+                    <iframe src="https://www.youtube.com/embed/${id}?rel=0" allowfullscreen loading="lazy"></iframe>
+                    <h3>${v.title}</h3>
+                </div>` : '';
+        }).join('');
+
+        if(filtered.length === 0) {
+            container.innerHTML = `<p style="text-align:center; grid-column:1/-1; padding:50px; font-weight:600; color:#bdc3c7;">
+                ${currentLang === 'Hindi' ? 'अभी कोई वीडियो उपलब्ध नहीं है।' : 'No videos found.'}
+            </p>`;
+        }
+    }
+
+    function toggleLanguage() {
+        const btn = document.getElementById('langBtn');
+        if (currentLang === 'English') {
+            currentLang = 'Hindi';
+            btn.innerText = "English Mode"; 
+            btn.className = "btn btn-mode btn-to-english";
+        } else {
+            currentLang = 'English';
+            btn.innerText = "हिंदी Mode"; 
+            btn.className = "btn btn-mode btn-to-hindi";
+        }
+        render();
+    }
+
+    fetchData();
+</script>
+
+</body>
+</html>
