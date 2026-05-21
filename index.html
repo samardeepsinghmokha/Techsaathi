@@ -69,31 +69,24 @@
         .logo-lockup {
             display: inline-block;
             position: relative;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
         .logo-img {
-            width: 220px;
+            width: 280px;
             height: auto;
             display: block;
-            filter: drop-shadow(0 0 40px var(--glow));
-            transition: filter 0.4s ease;
+            mix-blend-mode: lighten;
+            filter: drop-shadow(0 0 50px var(--glow)) brightness(1.05);
+            transition: filter 0.4s ease, transform 0.4s ease;
         }
-        .logo-img:hover { filter: drop-shadow(0 0 60px rgba(255,95,31,0.6)); }
-
-        .badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(255,95,31,0.12); border: 1px solid rgba(255,95,31,0.3);
-            border-radius: 100px; padding: 5px 14px;
-            font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em;
-            color: var(--gold); text-transform: uppercase; margin-bottom: 18px;
-            animation: fadeDown 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+        .logo-img:hover {
+            filter: drop-shadow(0 0 70px rgba(255,95,31,0.7)) brightness(1.1);
+            transform: scale(1.03);
         }
-        .badge-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite; }
-        @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)} }
 
         .tagline {
-            color: var(--muted); font-size: 0.95rem; letter-spacing: 0.04em;
+            color: var(--muted); font-size: 1.1rem; letter-spacing: 0.04em;
             animation: fadeDown 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
@@ -111,7 +104,7 @@
             background: rgba(255,255,255,0.04);
             border: 1px solid var(--border);
             border-radius: 100px;
-            color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 1rem;
+            color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 1.15rem;
             outline: none; transition: all 0.3s ease;
             backdrop-filter: blur(12px);
         }
@@ -125,7 +118,7 @@
         /* ── Section label ── */
         .section-label {
             font-family: 'Syne', sans-serif;
-            font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+            font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase;
             color: var(--muted); margin-bottom: 28px;
             display: flex; align-items: center; gap: 14px;
         }
@@ -175,7 +168,7 @@
 
         .card-title {
             font-family: 'Syne', sans-serif;
-            font-size: 1.05rem; font-weight: 700;
+            font-size: 1.25rem; font-weight: 700;
             line-height: 1.35; color: var(--text);
             margin-bottom: 12px;
         }
@@ -184,15 +177,15 @@
             display: flex; align-items: center; gap: 8px;
         }
         .lang-pill {
-            font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-            padding: 3px 10px; border-radius: 100px;
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 4px 12px; border-radius: 100px;
             background: rgba(255,95,31,0.12); color: var(--orange); border: 1px solid rgba(255,95,31,0.2);
         }
 
         /* ── Status ── */
         #status {
             text-align: center; padding: 80px 20px;
-            color: var(--muted); font-size: 1rem; font-weight: 400;
+            color: var(--muted); font-size: 1.15rem; font-weight: 400;
             grid-column: 1/-1;
         }
         .spinner {
@@ -217,8 +210,8 @@
         }
 
         .btn {
-            padding: 13px 28px; border-radius: 100px; border: none;
-            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
+            padding: 15px 34px; border-radius: 100px; border: none;
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem;
             cursor: pointer; transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
             letter-spacing: 0.02em; white-space: nowrap;
         }
@@ -248,7 +241,7 @@
             color: var(--muted);
         }
         .empty-emoji { font-size: 3rem; margin-bottom: 16px; display: block; }
-        .empty h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; color: #444; margin-bottom: 8px; }
+        .empty h3 { font-family: 'Syne', sans-serif; font-size: 1.3rem; color: #444; margin-bottom: 8px; }
 
         /* ── Animations ── */
         @keyframes fadeDown {
@@ -279,7 +272,6 @@
 
 <div class="wrapper">
     <header>
-        <div class="badge"><span class="badge-dot"></span> Live Library</div>
         <div class="logo-lockup">
             <img src="IMG_1285.png" alt="Tech Saathi" class="logo-img">
         </div>
